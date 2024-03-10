@@ -1,0 +1,15 @@
+Package: rolleda
+Type: Package
+Title: Rolling Exploratory Data Analysis
+Version: 1.0
+Date: YYYY-MM-DD
+Author: Jason Foster
+Maintainer: Jason Foster <jason.j.foster@gmail.com>
+Description: Web application for rolling exploratory data analysis of time-series data.
+License: GPL (>= 2)
+URL: https://github.com/jasonjfoster/rolleda
+BugReports: https://github.com/jasonjfoster/rolleda/issues
+Imports: shiny, shinythemes, dygraphs, nycflights13, data.table, zoo, roll, scales, grDevices
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Encoding: UTF-8

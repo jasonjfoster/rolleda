@@ -1,0 +1,4 @@
+export(roll_eda)
+importFrom(data.table, ":=")
+importFrom(data.table, .SD)
+importFrom(grDevices, rgb)
