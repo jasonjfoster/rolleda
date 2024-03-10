@@ -169,9 +169,9 @@ roll_eda <- function(...) {
         
         dimnames(result_xts)[[3]] <- as.character(zoo::index(subset_xts))
         result_dt <- data.table::as.data.table(result_xts)
-        result_dt[ , variable := paste(get("V2"), get("V1"), sep = "_")]
+        result_dt[ , ("variable") := paste(get("V2"), get("V1"), sep = "_")]
         result_dt <- data.table::dcast(result_dt, V3 ~ variable, fun.aggregate = mean)
-        result_dt[ , V3 := parse_dates(get("V3"))]
+        result_dt[ , ("V3") := parse_dates(get("V3"))]
         data.table::setcolorder(result_dt, c("V3", paste0(rep(input$select_dep, each = length(input$select_indep)),
                                                           "_", input$select_indep)))
         
