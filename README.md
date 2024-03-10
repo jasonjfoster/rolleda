@@ -20,5 +20,6 @@ Load the application and supply a dataset:
 ``` r
 library(rolleda)
 
+# rolling exploratory data analysis
 roll_eda()
 ```

@@ -57,10 +57,6 @@ roll_eda <- function(...) {
   
   server <- function(input, output) {
     
-    # tags$head(
-    #   tags$link(rel = "stylesheet", type = "text/css", href = "dygraph.css")
-    # )
-    
     values <- shiny::reactiveValues(files_ls = list("nycflights13.csv" = nycflights13::weather),
                                     select_file = "nycflights13.csv",
                                     file_df = nycflights13::weather,
