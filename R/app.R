@@ -26,7 +26,7 @@ roll_eda <- function(...) {
     
     shiny::titlePanel(title = shiny::div(shiny::img(src = "www/logo.png"),
                                          shiny::HTML("<b>Rolling exploratory data analysis</b>")),
-               window = "Rolling exploratory data analysis"),
+                      window = "Rolling exploratory data analysis"),
     
     shiny::sidebarLayout(
       
@@ -85,7 +85,7 @@ roll_eda <- function(...) {
     
     output$input_files <- shiny::renderUI({
       
-      input$input_files # reset the input
+      input$input_files # reset input
       
       shiny::fileInput("input_files", "Choose data file(s)",
                        multiple = TRUE)
@@ -146,14 +146,13 @@ roll_eda <- function(...) {
       
       shiny::validate(shiny::need(c(input$select_dep, input$select_indep) %in% colnames(values$file_df), ""))
       
-      cols <- c(values$file_idx, input$select_dep, input$select_indep)
-      
-      # values$subset_df <- data.table::as.data.table(values$file_df)[order(get(values$file_idx)), cols, with = FALSE]
-      values$subset_df <- data.table::as.data.table(values$file_df)[ , cols, with = FALSE]
+      values$subset_df <- data.table::as.data.table(values$file_df)[order(get(values$file_idx)),
+                                                                    c(values$file_idx, input$select_dep, input$select_indep), with = FALSE]
+      # values$subset_df <- data.table::as.data.table(values$file_df)[ , cols, with = FALSE]
       subset_xts <- data.table::as.xts.data.table(values$subset_df)
       
       roll_fn <- function(fn, ...) {
-        fn(subset_xts[, c(input$select_dep, input$select_indep)], width = input$width, ...)
+        fn(subset_xts[ , c(input$select_dep, input$select_indep)], width = input$width, ...)
       }
       
       roll_cov_fn <- function(fn) {
@@ -162,8 +161,8 @@ roll_eda <- function(...) {
         shiny::req(input$select_indep)
         
         result_xts <- fn(
-          x = subset_xts[, input$select_indep],
-          y = subset_xts[, input$select_dep],
+          x = subset_xts[ , input$select_indep],
+          y = subset_xts[ , input$select_dep],
           width = input$width
         )
         
@@ -184,11 +183,11 @@ roll_eda <- function(...) {
       roll_lm_fn <- function(statistic) {
         
         shiny::req(input$select_dep)
-        shiny:: req(input$select_indep)
+        shiny::req(input$select_indep)
         
         result_xts <- roll::roll_lm(
-          x = subset_xts[, input$select_indep],
-          y = subset_xts[, input$select_dep],
+          x = subset_xts[ , input$select_indep],
+          y = subset_xts[ , input$select_dep],
           width = input$width
         )
         
@@ -220,7 +219,7 @@ roll_eda <- function(...) {
       }
       
       statistic_map <- list(
-        "Level" = function() subset_xts[, c(input$select_dep, input$select_indep)],
+        "Level" = function() subset_xts[ , c(input$select_dep, input$select_indep)],
         "Minimum" = function() roll_fn(roll::roll_min),
         "1st Quartile" = function() roll_fn(roll::roll_quantile, p = 0.25),
         "Median" = function() roll_fn(roll::roll_median),
@@ -269,7 +268,11 @@ roll_eda <- function(...) {
         if (n_dep > 1) {
           colors <- palette_jjf(n_dep, n_indep)
         } else {
+          
+          shiny::req(input$n_indep)
+          
           colors <- palette_jjf(n_indep)
+          
         }
         
       } else if (input$statistic == "R-squared") {
