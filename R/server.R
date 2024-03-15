@@ -7,7 +7,8 @@ server <- function(input, output) {
                                   select_dep = "temp",
                                   select_indep = c("dewp", "humid"),
                                   subset_df = nycflights13::weather,
-                                  result_xts = nycflights13::weather)
+                                  result_xts = nycflights13::weather,
+                                  colors = palette_jjf(2))
   
   shiny::observeEvent(input$input_files, {
     
@@ -44,6 +45,7 @@ server <- function(input, output) {
     values$select_indep <- colnames(values$file_df)[vapply(values$file_df, is.numeric, logical(1))]
     values$subset_df <- values$files_ls[[values$select_file]]
     values$result_xts <- values$files_ls[[values$select_file]]
+    values$colors <- palette_jjf(ncol(values$file_df))
     
   })
   
@@ -87,7 +89,8 @@ server <- function(input, output) {
   
   shiny::observe({
     
-    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    # shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    shiny::validate(shiny::need(c(input$select_dep, input$select_indep) %in% colnames(values$file_df), ""))
     
     cols <- c(input$select_dep, input$select_indep)
     
@@ -195,9 +198,10 @@ server <- function(input, output) {
     
   })
   
-  output$result_plot <- dygraphs::renderDygraph({
+  shiny::observe({
     
-    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep),
+               values$result_xts)
     
     n_dep <- length(input$select_dep)
     n_indep <- length(input$select_indep)
@@ -215,7 +219,6 @@ server <- function(input, output) {
         colors <- palette_jjf(n_dep, n_indep)
       } else {
         colors <- palette_jjf(n_indep)
-        
       }
       
     } else if (input$statistic == "R-squared") {
@@ -239,7 +242,16 @@ server <- function(input, output) {
     names(colors) <- colnames(values$result_xts)
     
     colors <- colors[names(colors) %in% input$plot_variable]
-    names(colors) <- NULL
+    names(colors) <- NULL # dygraphs
+    
+    values$colors <- colors
+    
+  })
+  
+  output$result_plot <- dygraphs::renderDygraph({
+  # output$result_plot <- plotly::renderPlotly({
+    
+    shiny::req(input$plot_variable, values$colors)
     
     plot_xts <- values$result_xts[ , colnames(values$result_xts) %in% input$plot_variable]
     
@@ -251,8 +263,26 @@ server <- function(input, output) {
       dygraphs::dyAxis("y2", axisLabelWidth = 0) |>
       dygraphs::dyRangeSelector(fillColor = grDevices::rgb(238, 238, 238, maxColorValue = 255),
                                 strokeColor	= grDevices::rgb(204, 204, 204, maxColorValue = 255)) |>
-      dygraphs::dyOptions(colors = colors) |>
+      dygraphs::dyOptions(colors = values$colors) |>
       dygraphs::dyCSS("inst/www/dygraph.css")
+    
+    # p <- plotly::plot_ly(x = zoo::index(plot_xts)) |>
+    #   plotly::layout(title = list(text = paste0("<b>", gsub(ext, "", input$select_file), " - ", input$statistic, "</b>"),
+    #                               xanchor = "left", x = 0.05),
+    #                  legend = list(orientation = "h", xanchor = "center", x = 0.5),
+    #                  # font = list(size = 14),
+    #                  xaxis = list(showline = TRUE, gridcolor = grDevices::rgb(204, 204, 204, maxColorValue = 255)),
+    #                  yaxis = list(showline = TRUE, gridcolor = grDevices::rgb(204, 204, 204, maxColorValue = 255)))
+    # 
+    # for (j in 1:ncol(plot_xts)) {
+    # 
+    #   p <- p |> plotly::add_lines(y = zoo::coredata(plot_xts[ , j]),
+    #                               name = colnames(plot_xts)[j],
+    #                               line = list(color = values$colors[j]))
+    # 
+    # }
+    # 
+    # return(p)
     
   })
   
