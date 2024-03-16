@@ -8,7 +8,7 @@ server <- function(input, output) {
                                   select_indep = c("dewp", "humid"),
                                   subset_df = nycflights13::weather,
                                   result_xts = nycflights13::weather,
-                                  colors = palette_jjf(2))
+                                  colors = palette_jjf(3))
   
   shiny::observeEvent(input$input_files, {
     
@@ -89,7 +89,8 @@ server <- function(input, output) {
   
   shiny::observe({
     
-    # shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    # require values are available and validate in data.frame, e.g. after file change
+    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
     shiny::validate(shiny::need(c(input$select_dep, input$select_indep) %in% colnames(values$file_df), ""))
     
     cols <- c(input$select_dep, input$select_indep)
@@ -200,8 +201,9 @@ server <- function(input, output) {
   
   shiny::observe({
     
-    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep),
-               values$result_xts)
+    # require values are available and validate in xts, e.g. after file change
+    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    shiny::validate(shiny::need(c(input$select_dep, input$select_indep) %in% colnames(values$result_xts), ""))
     
     n_dep <- length(input$select_dep)
     n_indep <- length(input$select_indep)
@@ -240,7 +242,6 @@ server <- function(input, output) {
     }
     
     names(colors) <- colnames(values$result_xts)
-    
     colors <- colors[names(colors) %in% input$plot_variable]
     names(colors) <- NULL # dygraphs
     
@@ -251,7 +252,8 @@ server <- function(input, output) {
   output$result_plot <- dygraphs::renderDygraph({
   # output$result_plot <- plotly::renderPlotly({
     
-    shiny::req(input$plot_variable, values$colors)
+    # require object is xts
+    shiny::validate(shiny::need(inherits(values$result_xts, "xts"), ""))
     
     plot_xts <- values$result_xts[ , colnames(values$result_xts) %in% input$plot_variable]
     
@@ -303,14 +305,15 @@ server <- function(input, output) {
   
   shiny::observeEvent(input$reset_files, {
     
-    values$files_ls <- list()
-    values$select_file <- NULL
-    values$file_df <- NULL
-    values$file_idx <- NULL
-    values$select_dep <- NULL
-    values$select_indep <- NULL
-    values$subset_df <- NULL
-    values$result_xts <- NULL
+    values$files_ls <- list("nycflights13.csv" = nycflights13::weather)
+    values$select_file <- "nycflights13.csv"
+    values$file_df <- nycflights13::weather
+    values$file_idx <- "time_hour"
+    values$select_dep <- "temp"
+    values$select_indep <- c("dewp", "humid")
+    values$subset_df <- nycflights13::weather
+    values$result_xts <- nycflights13::weather
+    values$colors <- palette_jjf(3)
     
   })
   
