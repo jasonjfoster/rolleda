@@ -90,7 +90,7 @@ server <- function(input, output) {
   shiny::observe({
     
     # require values are available and validate in data.frame, e.g. after file change
-    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep), values$file_idx)
     shiny::validate(shiny::need(c(input$select_dep, input$select_indep) %in% colnames(values$file_df), ""))
     
     cols <- c(input$select_dep, input$select_indep)
@@ -229,7 +229,7 @@ server <- function(input, output) {
   shiny::observe({
     
     # require values are available and validate in xts, e.g. after file change
-    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep))
+    shiny::req(shiny::isTruthy(input$select_dep) || shiny::isTruthy(input$select_indep), values$file_idx)
     shiny::validate(shiny::need(c(input$select_dep, input$select_indep) %in% colnames(values$result_xts), ""))
     
     n_dep <- length(input$select_dep)
