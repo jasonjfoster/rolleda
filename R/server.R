@@ -110,21 +110,48 @@ server <- function(input, output) {
     
     roll_cov_fn <- function(fn) {
       
-      shiny::req(input$select_dep, input$select_indep)
+      n_dep <- length(input$select_dep)
+      n_indep <- length(input$select_indep)
       
-      result_xts <- fn(
-        x = subset_xts[ , input$select_indep],
-        y = subset_xts[ , input$select_dep],
-        width = input$width
-      )
-      
+      if (n_indep > 0 && n_dep > 0) {
+        
+        result_xts <- fn(
+          x = subset_xts[ , input$select_indep],
+          y = subset_xts[ , input$select_dep],
+          width = input$width
+        )
+        
+        cols <- paste0(rep(input$select_dep, each = length(input$select_indep)),
+                       "_", input$select_indep)
+        
+      } else if (n_indep > 0) {
+        
+        result_xts <- fn(
+          x = subset_xts[ , input$select_indep],
+          width = input$width
+        )
+        
+        cols <- paste0(rep(input$select_indep, each = length(input$select_indep)),
+                       "_", input$select_indep)
+        
+      } else if (n_dep > 0) {
+        
+        result_xts <- fn(
+          x = subset_xts[ , input$select_dep],
+          width = input$width
+        )
+        
+        cols <- paste0(rep(input$select_dep, each = length(input$select_dep)),
+                       "_", input$select_dep)
+        
+      }
+
       dimnames(result_xts)[[3]] <- as.character(zoo::index(subset_xts))
       result_dt <- data.table::as.data.table(result_xts)
       result_dt[ , ("variable") := paste(get("V2"), get("V1"), sep = "_")]
       result_dt <- data.table::dcast(result_dt, V3 ~ variable, fun.aggregate = mean)
       result_dt[ , ("V3") := parse_dates(get("V3"))]
-      data.table::setcolorder(result_dt, c("V3", paste0(rep(input$select_dep, each = length(input$select_indep)),
-                                                        "_", input$select_indep)))
+      data.table::setcolorder(result_dt, c("V3", cols))
       
       result_xts <- data.table::as.xts.data.table(result_dt)
       
@@ -250,7 +277,6 @@ server <- function(input, output) {
   })
   
   output$result_plot <- dygraphs::renderDygraph({
-  # output$result_plot <- plotly::renderPlotly({
     
     # require object is xts
     shiny::validate(shiny::need(inherits(values$result_xts, "xts"), ""))
@@ -267,24 +293,6 @@ server <- function(input, output) {
                                 strokeColor	= grDevices::rgb(204, 204, 204, maxColorValue = 255)) |>
       dygraphs::dyOptions(colors = values$colors) |>
       dygraphs::dyCSS("inst/www/dygraph.css")
-    
-    # p <- plotly::plot_ly(x = zoo::index(plot_xts)) |>
-    #   plotly::layout(title = list(text = paste0("<b>", gsub(ext, "", input$select_file), " - ", input$statistic, "</b>"),
-    #                               xanchor = "left", x = 0.05),
-    #                  legend = list(orientation = "h", xanchor = "center", x = 0.5),
-    #                  # font = list(size = 14),
-    #                  xaxis = list(showline = TRUE, gridcolor = grDevices::rgb(204, 204, 204, maxColorValue = 255)),
-    #                  yaxis = list(showline = TRUE, gridcolor = grDevices::rgb(204, 204, 204, maxColorValue = 255)))
-    # 
-    # for (j in 1:ncol(plot_xts)) {
-    # 
-    #   p <- p |> plotly::add_lines(y = zoo::coredata(plot_xts[ , j]),
-    #                               name = colnames(plot_xts)[j],
-    #                               line = list(color = values$colors[j]))
-    # 
-    # }
-    # 
-    # return(p)
     
   })
   

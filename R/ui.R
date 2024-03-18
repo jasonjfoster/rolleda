@@ -32,7 +32,6 @@ ui <- shiny::fluidPage(
     
     shiny::mainPanel(
       dygraphs::dygraphOutput("result_plot", height = 700)
-      # plotly::plotlyOutput("result_plot", height = 800)
     ),
     
     position = "right"
