@@ -1,5 +1,7 @@
 # rolleda
 
+[![](https://github.com/jasonjfoster/rolleda/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/jasonjfoster/rolleda/actions/workflows/check-standard.yaml)
+
 ## Overview
 
 `rolleda` is a web application that provides exploratory data analysis of rolling statistics for time-series data.
