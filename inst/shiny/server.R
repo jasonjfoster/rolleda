@@ -292,7 +292,7 @@ server <- function(input, output) {
       dygraphs::dyRangeSelector(fillColor = grDevices::rgb(238, 238, 238, maxColorValue = 255),
                                 strokeColor	= grDevices::rgb(204, 204, 204, maxColorValue = 255)) |>
       dygraphs::dyOptions(colors = values$colors) |>
-      dygraphs::dyCSS("inst/www/dygraph.css")
+      dygraphs::dyCSS("inst/shiny/www/dygraph.css")
     
   })
   

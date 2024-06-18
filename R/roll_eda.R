@@ -11,7 +11,14 @@
 ##' @export
 roll_eda <- function(...) {
   
-  shiny::addResourcePath("www", system.file("www", package = "rolleda"))
+  shiny_path <- system.file("shiny", package = "rolleda")
+  
+  source(file.path(shiny_path, "utils.R"))
+  ui <- source(file.path(shiny_path, "ui.R"))$value
+  server <- source(file.path(shiny_path, "server.R"))$value
+  
+  # add resource path for logo
+  shiny::addResourcePath("www", file.path(shiny_path, "www"))
   
   shiny::shinyApp(ui, server, ...)
   
