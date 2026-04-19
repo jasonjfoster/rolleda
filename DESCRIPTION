@@ -8,7 +8,8 @@ Description: Web application for rolling exploratory data analysis of time-serie
 License: GPL (>= 2)
 URL: https://github.com/jasonjfoster/rolleda
 BugReports: https://github.com/jasonjfoster/rolleda/issues
-Imports: shiny, bslib, dygraphs, nycflights13, data.table, zoo, roll, scales, grDevices
+Imports: shiny, data.table, grDevices
+Suggests: bslib, dygraphs, nycflights13, zoo, roll, scales
 Encoding: UTF-8
 Config/roxygen2/old_usage: TRUE
 Config/roxygen2/version: 7.3.3.9000
