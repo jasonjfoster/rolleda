@@ -1,8 +1,7 @@
 Package: rolleda
 Type: Package
 Title: Rolling Exploratory Data Analysis
-Version: 1.0
-Date: YYYY-MM-DD
+Version: 1.0.0
 Authors@R: person("Jason", "Foster", , "jason.j.foster@gmail.com", c("aut", "cre"))
 Description: Web application for rolling exploratory data analysis of time-series data.
 License: GPL (>= 2)
@@ -12,4 +11,4 @@ Imports: shiny, data.table, grDevices
 Suggests: bslib, dygraphs, nycflights13, zoo, roll, scales
 Encoding: UTF-8
 Config/roxygen2/old_usage: TRUE
-Config/roxygen2/version: 7.3.3.9000
+Config/roxygen2/version: 8.0.0
