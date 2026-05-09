@@ -9,6 +9,9 @@ roll_eda(...)
 \arguments{
 \item{...}{Additional arguments passed to \code{\link[shiny:shinyApp]{shiny::shinyApp}}.}
 }
+\value{
+A Shiny app object for rolling exploratory data analysis of time-series data.
+}
 \description{
 A web application for rolling exploratory data analysis of time-series data.
 }

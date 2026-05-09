@@ -3,6 +3,7 @@
 ##' A web application for rolling exploratory data analysis of time-series data.
 ##' 
 ##' @param ... Additional arguments passed to \code{\link[shiny:shinyApp]{shiny::shinyApp}}.
+##' @return A Shiny app object for rolling exploratory data analysis of time-series data.
 ##' @examples
 ##' \dontrun{
 ##' # rolling exploratory data analysis
