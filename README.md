@@ -12,16 +12,16 @@ The 'rolleda' package explores the rolling statistics of the 'roll' package in a
 
 Install the development version from GitHub:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("jasonjfoster/rolleda")
+```r
+# install.packages("pak")
+pak::pak("jasonjfoster/rolleda")
 ```
 
 ## Usage
 
 Load the package and launch the application:
 
-``` r
+```r
 library(rolleda)
 
 # rolling exploratory data analysis
