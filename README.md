@@ -4,7 +4,9 @@
 
 ## Overview
 
-`rolleda` is a web application that provides exploratory data analysis of rolling statistics for time-series data.
+'rolleda' provides exploratory data analysis of rolling statistics for time-series data.
+
+The 'rolleda' package explores the rolling statistics of the 'roll' package in a 'Shiny' web application that is launched with the `roll_eda()` function.
 
 ## Installation
 
@@ -17,7 +19,7 @@ devtools::install_github("jasonjfoster/rolleda")
 
 ## Usage
 
-Load the application and supply a dataset:
+Load the package and launch the application:
 
 ``` r
 library(rolleda)

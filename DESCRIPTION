@@ -3,7 +3,7 @@ Type: Package
 Title: Rolling Exploratory Data Analysis
 Version: 1.0.0
 Authors@R: person("Jason", "Foster", , "jason.j.foster@gmail.com", c("aut", "cre"))
-Description: Web application for rolling exploratory data analysis of time-series data.
+Description: Exploratory data analysis of rolling statistics for time-series data. The 'rolleda' package explores the rolling statistics of the 'roll' package in a 'Shiny' web application that is launched with the roll_eda() function.
 License: GPL (>= 2)
 URL: https://github.com/jasonjfoster/rolleda
 BugReports: https://github.com/jasonjfoster/rolleda/issues
