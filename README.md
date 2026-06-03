@@ -10,7 +10,13 @@ The 'rolleda' package explores the rolling statistics of the 'roll' package in a
 
 ## Installation
 
-Install the development version from GitHub:
+Install the released version from CRAN:
+
+```r
+# install.packages("rolleda")
+```
+
+Or the development version from GitHub:
 
 ```r
 # install.packages("pak")
